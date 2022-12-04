@@ -92,10 +92,24 @@ function FilterableProductTable({ products }) {
   );
 }
 
+const today = new Date();
+
+function formatDate(date) {
+  return date.toLocaleDateString();
+}
+
 const App = () => {
+  const status = "Loading...";
   return (
     <div className="App">
       <FilterableProductTable products={PRODUCTS} />
+      <h1>Is it still {status}</h1>
+      <h1>Today's date is: {formatDate(today)}</h1>
+      <h2>I want to test some CSS in react</h2>
+      <ul style={{ backgroundColor: "blue", color: "pink" }}>
+        <li>Item 1</li>
+        <li>Item 2</li>
+      </ul>
     </div>
   );
 };
