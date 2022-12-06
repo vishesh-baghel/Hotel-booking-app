@@ -98,6 +98,22 @@ function formatDate(date) {
   return date.toLocaleDateString();
 }
 
+function getImageUrl(person, size = "s") {
+  return "https://i.imgur.com/" + person.imageId + size + ".jpg";
+}
+
+function Avatar({ person, size }) {
+  return (
+    <img
+      src={getImageUrl(person)}
+      className="Avatar"
+      alt={person.name}
+      width={size}
+      height={size}
+    />
+  );
+}
+
 const App = () => {
   const status = "Loading...";
   return (
@@ -110,6 +126,11 @@ const App = () => {
         <li>Item 1</li>
         <li>Item 2</li>
       </ul>
+      <Avatar
+        person={{ name: "Katsuko Saruhashi", imageId: "YfeOqp2" }}
+        size={100}
+      />
+      <Avatar person={{ name: "akilu lemma", imageId: "OKS67lh" }} size={50} />
     </div>
   );
 };
