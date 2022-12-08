@@ -114,6 +114,56 @@ function Avatar({ person, size }) {
   );
 }
 
+function Card({ children }) {
+  return <div className="Card">{children}</div>;
+}
+
+function Profile({ person, imageSize = 50 }) {
+  const imageSrc = getImageUrl(person, "l");
+  return (
+    <section className="Profile">
+      <h2>{person.name}</h2>
+      <img
+        src={imageSrc}
+        alt={person.name}
+        width={imageSize}
+        height={imageSize}
+      />
+      <ul>
+        <li>Profession: {person.profession}</li>
+        <li>Discovery: {person.discovery}</li>
+        <li>Awards: {person.awards.join(", ")}</li>
+      </ul>
+    </section>
+  );
+}
+
+function Gallary() {
+  return (
+    <div>
+      <h2>Notable scientists</h2>
+      <Profile
+        person={{
+          name: "Katsuko Saruhashi",
+          imageId: "YfeOqp2",
+          profession: "Physicist",
+          discovery: "Quantum entanglement",
+          awards: ["Nobel Prize", "Fields Medal"],
+        }}
+      />
+      <Profile
+        person={{
+          name: "akilu lemma",
+          imageId: "OKS67lh",
+          profession: "Physicist",
+          discovery: "Quantum entanglement",
+          awards: ["Nobel Prize", "Fields Medal"],
+        }}
+      />
+    </div>
+  );
+}
+
 const App = () => {
   const status = "Loading...";
   return (
@@ -126,11 +176,17 @@ const App = () => {
         <li>Item 1</li>
         <li>Item 2</li>
       </ul>
-      <Avatar
-        person={{ name: "Katsuko Saruhashi", imageId: "YfeOqp2" }}
-        size={100}
-      />
-      <Avatar person={{ name: "akilu lemma", imageId: "OKS67lh" }} size={50} />
+      <Card>
+        <Avatar
+          person={{ name: "Katsuko Saruhashi", imageId: "YfeOqp2" }}
+          size={100}
+        />
+        <Avatar
+          person={{ name: "akilu lemma", imageId: "OKS67lh" }}
+          size={50}
+        />
+      </Card>
+      <Gallary />
     </div>
   );
 };
