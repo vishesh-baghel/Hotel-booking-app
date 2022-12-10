@@ -243,6 +243,62 @@ function List() {
   return <div>{listItems}</div>;
 }
 
+function Toolbar({ onPlayMovie, onUploadImage }) {
+  return (
+    <div>
+      <Button onClick={onPlayMovie}>Play</Button>
+      <Button onClick={onUploadImage}>Upload</Button>
+    </div>
+  );
+}
+
+function Button({ onClick, children }) {
+  return <button onClick={onClick}>{children}</button>;
+}
+
+function Toolbar2() {
+  return <AlertButton message="uploading">Upload is on the way!!</AlertButton>;
+}
+
+function AlertButton({ message, children }) {
+  function handleClick() {
+    alert(message);
+  }
+  return <button onClick={handleClick}>{children}</button>;
+}
+
+function EventPropogation() {
+  return (
+    <div onClick={() => alert("parent clicked!!")}>
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          alert("child clicked!!");
+        }}
+      >
+        Click me
+      </button>
+      <button onClick={() => alert("second child clicked!!")}>
+        Click me too
+      </button>
+    </div>
+  );
+}
+
+function Signup() {
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        alert("submitting!!");
+      }}
+    >
+      <input />
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+
 const App = () => {
   const status = "Loading...";
   return (
@@ -268,6 +324,13 @@ const App = () => {
       <Gallary />
       <PackingList />
       <List />
+      <Toolbar
+        onPlayMovie={() => alert("Played movie")}
+        onUploadImage={() => alert("Uploaded movie")}
+      />
+      <Toolbar2 />
+      <EventPropogation />
+      <Signup />
     </div>
   );
 };
