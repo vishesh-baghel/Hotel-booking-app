@@ -423,10 +423,30 @@ function SulptureGallery() {
     setShowImage(!showImage);
   };
 
+  let hasPrev = index > 0;
+  let hasNext = index < sculptureList.length - 1;
+
+  function handlePrev() {
+    if (hasPrev) {
+      setIndex(index - 1);
+    }
+  }
+
+  function handleNext() {
+    if (hasNext) {
+      setIndex(index + 1);
+    }
+  }
+
   let sculpture = sculptureList[index];
   return (
     <div className="sculpture-gallery">
-      <button onClick={changeIndex}>Next Sculpture</button>
+      <button onClick={handlePrev} disabled={!hasPrev}>
+        Previous
+      </button>
+      <button onClick={handleNext} disabled={!hasNext}>
+        Next
+      </button>
       <h1>Sculputure Name:{sculpture.name}</h1>
       <h2>Artist:{sculpture.artist}</h2>
       <button onClick={handleClick}>
@@ -435,6 +455,33 @@ function SulptureGallery() {
       {showImage && <img src={sculpture.url} alt={sculpture.alt} />}
     </div>
   );
+}
+
+function FeedbackForm() {
+  const [isSent, setIsSent] = useState(false);
+  const [message, setMessage] = useState("");
+  if (isSent) {
+    return <p>Thank you for your feedback!!</p>;
+  } else {
+    return (
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          setIsSent(true);
+        }}
+      >
+        <textarea
+          placeholder="Your feedback"
+          value={message}
+          onChange={(e) => {
+            setMessage(e.target.value);
+          }}
+        />
+        <br />
+        <button type="submit">Send</button>
+      </form>
+    );
+  }
 }
 
 const App = () => {
@@ -471,6 +518,7 @@ const App = () => {
       <Signup />
       <CheckLocalVariable />
       <SulptureGallery />
+      <FeedbackForm />
     </div>
   );
 };
