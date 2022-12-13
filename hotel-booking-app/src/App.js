@@ -484,6 +484,61 @@ function FeedbackForm() {
   }
 }
 
+function MessageSender() {
+  const [message, setMessage] = useState("Hello!");
+  const [to, setTo] = useState("vishesh");
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    setTimeout(() => {
+      alert(`You sent ${message} to ${to}`);
+    }, 3000);
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label>
+        To:{" "}
+        <select value={to} onChange={(e) => setTo(e.targer.value)}>
+          <option value="vishesh">Vishesh</option>
+          <option value="sarah">Sarah</option>
+        </select>
+      </label>
+      <textarea value={message} onChange={(e) => setMessage(e.target.value)} />
+      <button type="submit">Send</button>
+    </form>
+  );
+}
+
+function TrafficLight() {
+  const [walk, setWalk] = useState(false);
+
+  function handleClick() {
+    setWalk(!walk);
+    alert(walk ? "Stop is next" : "Walk is next");
+  }
+  return (
+    <>
+      <button onClick={handleClick}>Change to: {walk ? "Walk" : "Stop"}</button>
+      <h1 style={{ color: walk ? "darkgreen" : "darkred" }}>
+        {walk ? "Walk" : "Stop"}
+      </h1>
+    </>
+  );
+}
+
+function CheckQueueFeature() {
+  const [count, setCount] = useState(0);
+
+  function handleClick() {
+    // setCount(count + 1);
+    setCount((n) => n + 1);
+    setCount(23);
+  }
+
+  return <button onClick={handleClick}>Increment count: {count}</button>;
+}
+
 const App = () => {
   const status = "Loading...";
   return (
@@ -519,6 +574,9 @@ const App = () => {
       <CheckLocalVariable />
       <SulptureGallery />
       <FeedbackForm />
+      <MessageSender />
+      <TrafficLight />
+      <CheckQueueFeature />
     </div>
   );
 };
