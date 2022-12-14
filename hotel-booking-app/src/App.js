@@ -539,6 +539,152 @@ function CheckQueueFeature() {
   return <button onClick={handleClick}>Increment count: {count}</button>;
 }
 
+function MovingDot() {
+  const [position, setPosition] = useState({
+    x: 0,
+    y: 0,
+  });
+
+  function handleMouseMove(e) {
+    setPosition({
+      x: e.clientX,
+      y: e.clientY,
+    });
+  }
+
+  return (
+    <div
+      onPointerMove={handleMouseMove}
+      style={{
+        position: "relative",
+        height: "100vh",
+        width: "100vw",
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          backgroundColor: "red",
+          borderRadius: "50%",
+          transform: `translate(${position.x}px, ${position.y}px)`,
+          left: -10,
+          top: -10,
+          height: 20,
+          width: 20,
+        }}
+      ></div>
+    </div>
+  );
+}
+
+function EmailForm() {
+  const [person, setPerson] = useState({
+    firstName: "vishesh",
+    lastName: "baghel",
+    email: "visheshbaghel99@gmail.com",
+    address: {
+      street: "123 Main St",
+      city: "San Francisco",
+      state: "CA",
+    },
+  });
+
+  function handleFirstNameChange(e) {
+    setPerson({
+      ...person,
+      firstName: e.target.value,
+    });
+  }
+
+  function handleLastNameChange(e) {
+    setPerson({
+      ...person,
+      lastName: e.target.value,
+    });
+  }
+
+  function handleEmailChange(e) {
+    setPerson({
+      ...person,
+      email: e.target.value,
+    });
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    alert(
+      `Thank you for subscribing ${person.firstName} ${person.lastName} and you have given the permission ${person.subscribe} and your city is changed to ${person.address.city}`
+    );
+  }
+
+  function handleChange(e) {
+    setPerson({
+      ...person,
+      [e.target.name]: e.target.value,
+    });
+  }
+
+  function handleCityInAddressChange(e) {
+    setPerson({
+      ...person,
+      address: {
+        ...person.address,
+        city: e.target.value,
+      },
+    });
+  }
+  return (
+    <div
+      style={{
+        border: "1px solid black",
+      }}
+    >
+      <h1>Subscribe to our newsletter</h1>
+      <form onSubmit={handleSubmit}>
+        <lable>
+          First Name:{" "}
+          <input
+            type="text"
+            name="firstName"
+            value={person.firstName}
+            onChange={handleFirstNameChange}
+          />
+        </lable>
+        <br />
+        <lable>
+          Last Name:{" "}
+          <input
+            type="text"
+            name="lastName"
+            value={person.lastName}
+            onChange={handleLastNameChange}
+          />
+        </lable>
+        <br />
+        <lable>
+          Email:{" "}
+          <input
+            type="text"
+            name="email"
+            value={person.email}
+            onChange={handleEmailChange}
+          />
+        </lable>
+        <br />
+        <lable>
+          Change address:{" "}
+          <input type="text" onChange={handleCityInAddressChange} />
+        </lable>
+        <br />
+        <lable>
+          <input name="subscribe" type="text" onChange={handleChange} />
+        </lable>
+        <button type="submit">Subscribe</button>
+      </form>
+    </div>
+  );
+}
+
 const App = () => {
   const status = "Loading...";
   return (
@@ -577,6 +723,8 @@ const App = () => {
       <MessageSender />
       <TrafficLight />
       <CheckQueueFeature />
+      <MovingDot />
+      <EmailForm />
     </div>
   );
 };
