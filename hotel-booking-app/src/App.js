@@ -685,6 +685,68 @@ function EmailForm() {
   );
 }
 
+function ArtistList() {
+  let nextId = 0;
+  const [name, setName] = useState("");
+  const [artist, setArtist] = useState([]);
+
+  function handleSubmit() {
+    setName("");
+    setArtist([...artist, { id: nextId++, name: name }]);
+  }
+
+  function handleAddition(e) {
+    setName(e.target.value);
+  }
+
+  return (
+    <div>
+      <h1>Artist List</h1>
+      <form>
+        <input type="text" value={name} onChange={handleAddition} />
+        <button type="submit" onChange={handleSubmit}>
+          Add artist
+        </button>
+      </form>
+      <ul>
+        {artist.map((artist) => (
+          <li key={nextId++}>{artist.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+let initialArtists = [
+  { id: 0, name: "Marta Colvin Andrade" },
+  { id: 1, name: "Lamidi Olonade Fakeye" },
+  { id: 2, name: "Louise Nevelson" },
+];
+
+function DeleteFromList() {
+  const [artists, setArtists] = useState(initialArtists);
+
+  return (
+    <div>
+      <h2>Delete from list:</h2>
+      <ul>
+        {artists.map((artist) => (
+          <li key={artist.id}>
+            {artist.name}{" "}
+            <button
+              onChange={() =>
+                setArtists(artists.filter((a) => a.id !== artist.id))
+              }
+            >
+              Delete
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 const App = () => {
   const status = "Loading...";
   return (
@@ -725,6 +787,8 @@ const App = () => {
       <CheckQueueFeature />
       <MovingDot />
       <EmailForm />
+      <ArtistList />
+      <DeleteFromList />
     </div>
   );
 };
