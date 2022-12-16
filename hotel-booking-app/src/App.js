@@ -685,8 +685,8 @@ function EmailForm() {
   );
 }
 
+let nextId = 0;
 function ArtistList() {
-  let nextId = 0;
   const [name, setName] = useState("");
   const [artist, setArtist] = useState([]);
 
@@ -747,6 +747,55 @@ function DeleteFromList() {
   );
 }
 
+let initialShapes = [
+  { id: 0, type: "circle", x: 50, y: 100 },
+  { id: 1, type: "square", x: 150, y: 100 },
+  { id: 2, type: "circle", x: 250, y: 100 },
+];
+
+function ShapeEditor() {
+  const [shapes, setShapes] = useState(initialShapes);
+
+  function handleClick() {
+    const nextShapes = shapes.map((shape) => {
+      if (shape.type === "square") {
+        return shape;
+      } else {
+        return {
+          ...shape,
+          y: shape.y + 50,
+        };
+      }
+    });
+    setShapes(nextShapes);
+  }
+
+  return (
+    <div>
+      <h2>Shape editor</h2>
+      <button onClick={handleClick}>Move circles down</button>
+      {shapes.map((shape) => (
+        <div
+          key={shape.id}
+          style={{
+            position: "absolute",
+            background: "red",
+            left: shape.x,
+            top: shape.y,
+            width: 20,
+            height: 20,
+            border: shape.type === "circle" ? "50%" : "0",
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+let statuses = ["empty", "typing", "submitting", "success", "error"];
+
+function DisplayVisulStates({ status }) {}
+
 const App = () => {
   const status = "Loading...";
   return (
@@ -789,6 +838,7 @@ const App = () => {
       <EmailForm />
       <ArtistList />
       <DeleteFromList />
+      <ShapeEditor />
     </div>
   );
 };
