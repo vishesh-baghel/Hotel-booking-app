@@ -792,9 +792,76 @@ function ShapeEditor() {
   );
 }
 
+function VisualStates({ status }) {
+  if (status === "success") {
+    return <h4>That's right !!💥💥</h4>;
+  }
+
+  return (
+    <form>
+      <textarea
+        placeholder="type something bitch!!"
+        disabled={status === "submitting"}
+      />
+      <br />
+      <button disabled={status === "submitting" || status === "empty"}>
+        Submit
+      </button>
+      {status === "error" && (
+        <p className="error">
+          God has not forsaken you. Seems like something's broke!!🤯🤯
+        </p>
+      )}
+    </form>
+  );
+}
+
 let statuses = ["empty", "typing", "submitting", "success", "error"];
 
-function DisplayVisulStates({ status }) {}
+function StatesOfForm() {
+  return (
+    <>
+      <h1>Different visual states of a form</h1>
+      {statuses.map((status) => (
+        <section key={status}>
+          <h3>Form ({status}):</h3>
+          <VisualStates status={status} />
+        </section>
+      ))}
+    </>
+  );
+}
+
+function Picture() {
+  const [isActive, setIsActive] = useState(false);
+
+  let backgroundClassName = "background";
+  let pictureClassName = "picture";
+
+  if (isActive) {
+    pictureClassName += "picture--active";
+  } else {
+    backgroundClassName += "background--active";
+  }
+
+  return (
+    <div
+      className={backgroundClassName}
+      style={{ border: "5px solid black" }}
+      onClick={() => setIsActive(false)}
+    >
+      <img
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsActive(true);
+        }}
+        className={pictureClassName}
+        src="https://i.imgur.com/5qwVYb1.jpeg"
+        alt="Rainbow houses in Kampung Pelangi, Indonesia"
+      />
+    </div>
+  );
+}
 
 const App = () => {
   const status = "Loading...";
@@ -839,6 +906,8 @@ const App = () => {
       <ArtistList />
       <DeleteFromList />
       <ShapeEditor />
+      <StatesOfForm />
+      <Picture />
     </div>
   );
 };
