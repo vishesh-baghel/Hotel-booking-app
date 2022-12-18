@@ -415,6 +415,7 @@ function SulptureGallery() {
   const [index, setIndex] = useState(0);
   const [showImage, setShowImage] = useState(false);
 
+  //eslint-disable-next-line
   function changeIndex() {
     setIndex(index + 1);
   }
@@ -863,6 +864,97 @@ function Picture() {
   );
 }
 
+//eslint-disable-next-line
+function EditProfile() {
+  const [isEditing, setIsEditing] = useState(false);
+  const [firstName, setFirstName] = useState("john");
+  const [lastName, setLastName] = useState("doe");
+
+  return (
+    <div style={{ marginTop: "20px", border: "5px solid black" }}>
+      <form
+        onSubmit={(e) => {
+          setIsEditing(true);
+        }}
+      >
+        <label>
+          FirstName:{" "}
+          {isEditing ? (
+            <input
+              onChange={(e) => {
+                e.preventDefault();
+                setFirstName(e.target.value);
+              }}
+            />
+          ) : (
+            { firstName }
+          )}
+        </label>
+        <br />
+        <label>
+          LastName:{" "}
+          {isEditing ? (
+            <input
+              onChange={(e) => {
+                e.preventDefault();
+                setLastName(e.target.value);
+              }}
+            />
+          ) : (
+            { lastName }
+          )}
+        </label>
+      </form>
+    </div>
+  );
+}
+
+const initialItems = [
+  { title: "pretzels", id: 0 },
+  { title: "crispy seaweed", id: 1 },
+  { title: "granola bar", id: 2 },
+];
+
+function Menu() {
+  const [items, setItems] = useState(initialItems);
+  const [selectedId, setSelectedId] = useState(0);
+
+  const selectedItem = items.find((item) => item.id === selectedId);
+
+  function handleItemChange(id, e) {
+    setItems(
+      items.map((item) => {
+        if (item.id === id) {
+          return {
+            ...item,
+            title: e.target.value,
+          };
+        } else {
+          return item;
+        }
+      })
+    );
+  }
+
+  return (
+    <div style={{ border: "3px solid black", marginTop: "20px" }}>
+      <h2>What's your travel snack?</h2>
+      <ul>
+        {items.map((item, index) => (
+          <li key={item.id}>
+            <input
+              value={item.title}
+              onChange={(e) => handleItemChange(item.id, e)}
+            />{" "}
+            <button onChange={() => setSelectedId(item.id)}>Choose</button>
+          </li>
+        ))}
+      </ul>
+      <p>You chose: {selectedItem.title}</p>
+    </div>
+  );
+}
+
 const App = () => {
   const status = "Loading...";
   return (
@@ -908,6 +1000,8 @@ const App = () => {
       <ShapeEditor />
       <StatesOfForm />
       <Picture />
+      {/* <EditProfile /> */}
+      <Menu />
     </div>
   );
 };
