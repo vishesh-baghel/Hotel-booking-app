@@ -1,4 +1,5 @@
 import "./App.css";
+import { initialTravelPlan } from "./places";
 import { useState } from "react";
 
 // const API_KEY = "www.omdbapi.com/?apikey=c4b00c87";
@@ -937,21 +938,64 @@ function Menu() {
   }
 
   return (
-    <div style={{ border: "3px solid black", marginTop: "20px" }}>
+    <>
       <h2>What's your travel snack?</h2>
       <ul>
         {items.map((item, index) => (
           <li key={item.id}>
             <input
               value={item.title}
-              onChange={(e) => handleItemChange(item.id, e)}
+              onChange={(e) => {
+                handleItemChange(item.id, e);
+              }}
             />{" "}
-            <button onChange={() => setSelectedId(item.id)}>Choose</button>
+            <button
+              onClick={() => {
+                setSelectedId(item.id);
+              }}
+            >
+              Choose
+            </button>
           </li>
         ))}
       </ul>
-      <p>You chose: {selectedItem.title}</p>
-    </div>
+      <p>You picked {selectedItem.title}.</p>
+    </>
+  );
+}
+
+function TravelPlan() {
+  const [plan, setPlan] = useState(initialTravelPlan);
+  const root = plan[0];
+  const planetId = root.childIds;
+
+  return (
+    <>
+      <h2>Travel plans</h2>
+      <ol>
+        {planetId.map((id) => (
+          <PlaceTree key={id} id={id} placesById={plan} />
+        ))}
+      </ol>
+    </>
+  );
+}
+
+function PlaceTree({ id, placesById }) {
+  const place = placesById[id];
+  const childIds = place.childIds;
+
+  return (
+    <li>
+      {place.title}
+      {childIds.length > 0 && (
+        <ol>
+          {childIds.map((childIds) => (
+            <PlaceTree key={childIds} id={childIds} placesById={placesById} />
+          ))}
+        </ol>
+      )}
+    </li>
   );
 }
 
@@ -1002,6 +1046,7 @@ const App = () => {
       <Picture />
       {/* <EditProfile /> */}
       <Menu />
+      <TravelPlan />
     </div>
   );
 };
