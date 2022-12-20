@@ -1017,20 +1017,17 @@ function TravelPlanItemList() {
       ...items,
       {
         id: nextId++,
-        title: { title },
+        title: title,
         packed: false,
       },
     ]);
   }
 
-  function handleChangeItem(id) {
+  function handleChangeItem(nextItem) {
     setItems(
       items.map((item) => {
-        if (item.id === id) {
-          return {
-            ...item,
-            packed: !item.packed,
-          };
+        if (item.id === nextItem.id) {
+          return nextItem;
         } else {
           return item;
         }
@@ -1086,11 +1083,101 @@ function PackedList({ items, onChangeItem, onDeleteItem }) {
     <ul>
       {items.map((item) => (
         <li key={item.id}>
-          <input type="checkbox" onChange={onChangeItem(nextId)} />
-          {item.title} <button onClick={onDeleteItem(item.id)}>Delete</button>
+          <label>
+            <input
+              type="checkbox"
+              checked={item.packed}
+              onChange={(e) => {
+                onChangeItem({
+                  ...item,
+                  packed: e.target.checked,
+                });
+              }}
+            />{" "}
+            {item.title}
+          </label>{" "}
+          <button onClick={() => onDeleteItem(item.id)}>Delete</button>
         </li>
       ))}
     </ul>
+  );
+}
+
+const initialLetters = [
+  {
+    id: 0,
+    subject: "Ready for adventure?",
+    isStarred: true,
+  },
+  {
+    id: 1,
+    subject: "Time to check in!",
+    isStarred: false,
+  },
+  {
+    id: 2,
+    subject: "Festival Begins in Just SEVEN Days!",
+    isStarred: false,
+  },
+];
+
+function MailClient() {
+  const [letters, setLetters] = useState(initialLetters);
+  const [highlightedId, setHighlightedId] = useState(null);
+
+  function handleHover(letterId) {
+    setHighlightedId(letterId);
+  }
+
+  function handleStar(starredId) {
+    setLetters(
+      letters.map((letter) => {
+        if (letter.id === starredId) {
+          return {
+            ...letter,
+            isStarred: !letter.isStarred,
+          };
+        } else {
+          return letter;
+        }
+      })
+    );
+  }
+
+  return (
+    <div style={{ border: "3px solid black", marginTop: "20px" }}>
+      <h3>Inbox</h3>
+      <ul>
+        {letters.map((letter) => (
+          <Letter
+            key={letter.id}
+            letter={letter}
+            isHighlighted={letter.id === highlightedId}
+            onHover={handleHover}
+            onToggleStar={handleStar}
+          />
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function Letter({ letter, isHighlighted, onHover, onToggleStar }) {
+  return (
+    <li
+      className={isHighlighted ? "highlighted" : ""}
+      onFocus={onHover(letter.id)}
+      onPointerMove={onHover(letter.id)}
+    >
+      <button
+        onClick={() => {
+          onToggleStar(letter.id);
+        }}
+      >
+        {letter.isStared ? "⭐" : "☆"}
+      </button>{" "}
+      {letter.subject}
+    </li>
   );
 }
 
@@ -1143,6 +1230,7 @@ const App = () => {
       <Menu />
       <TravelPlan />
       <TravelPlanItemList />
+      <MailClient />
     </div>
   );
 };
