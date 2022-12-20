@@ -999,6 +999,101 @@ function PlaceTree({ id, placesById }) {
   );
 }
 
+const initialItemsList = [
+  { id: 0, title: "Warm socks", packed: true },
+  { id: 1, title: "Travel journal", packed: false },
+  { id: 2, title: "Watercolors", packed: false },
+];
+
+function TravelPlanItemList() {
+  const [items, setItems] = useState(initialItemsList);
+
+  let nextId = 3;
+  let packed = items.filter((item) => item.packed).length;
+  let total = items.length;
+
+  function handleAddItem(title) {
+    setItems([
+      ...items,
+      {
+        id: nextId++,
+        title: { title },
+        packed: false,
+      },
+    ]);
+  }
+
+  function handleChangeItem(id) {
+    setItems(
+      items.map((item) => {
+        if (item.id === id) {
+          return {
+            ...item,
+            packed: !item.packed,
+          };
+        } else {
+          return item;
+        }
+      })
+    );
+  }
+
+  function handleDeleteItem(id) {
+    setItems(items.filter((item) => item.id !== id));
+  }
+
+  return (
+    <div style={{ border: "3px solid black", marginTop: "20px" }}>
+      <h3>List of Items for vacation</h3>
+      <Additem onAdditem={handleAddItem} />
+      <PackedList
+        items={items}
+        onChangeItem={handleChangeItem}
+        onDeleteItem={handleDeleteItem}
+      />
+      <br />
+      {packed} of {total} items packed
+    </div>
+  );
+}
+
+function Additem({ onAddItem }) {
+  const [title, setTitle] = useState("");
+
+  return (
+    <form>
+      <input
+        type="text"
+        value={title}
+        onChange={(e) => {
+          setTitle(e.target.value);
+        }}
+      />{" "}
+      <button
+        onClick={() => {
+          onAddItem(title);
+          setTitle("");
+        }}
+      >
+        Add
+      </button>
+    </form>
+  );
+}
+
+function PackedList({ items, onChangeItem, onDeleteItem }) {
+  return (
+    <ul>
+      {items.map((item) => (
+        <li key={item.id}>
+          <input type="checkbox" onChange={onChangeItem(nextId)} />
+          {item.title} <button onClick={onDeleteItem(item.id)}>Delete</button>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 const App = () => {
   const status = "Loading...";
   return (
@@ -1047,6 +1142,7 @@ const App = () => {
       {/* <EditProfile /> */}
       <Menu />
       <TravelPlan />
+      <TravelPlanItemList />
     </div>
   );
 };
