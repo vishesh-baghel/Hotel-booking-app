@@ -1145,8 +1145,8 @@ function MailClient() {
   }
 
   return (
-    <div style={{ border: "3px solid black", marginTop: "20px" }}>
-      <h3>Inbox</h3>
+    <>
+      <h2>Inbox</h2>
       <ul>
         {letters.map((letter) => (
           <Letter
@@ -1158,7 +1158,7 @@ function MailClient() {
           />
         ))}
       </ul>
-    </div>
+    </>
   );
 }
 
@@ -1166,18 +1166,61 @@ function Letter({ letter, isHighlighted, onHover, onToggleStar }) {
   return (
     <li
       className={isHighlighted ? "highlighted" : ""}
-      onFocus={onHover(letter.id)}
-      onPointerMove={onHover(letter.id)}
+      onFocus={() => {
+        onHover(letter.id);
+      }}
+      onPointerMove={() => {
+        onHover(letter.id);
+      }}
     >
       <button
         onClick={() => {
           onToggleStar(letter.id);
         }}
       >
-        {letter.isStared ? "⭐" : "☆"}
-      </button>{" "}
+        {letter.isStarred ? "Unstar" : "Star"}
+      </button>
       {letter.subject}
     </li>
+  );
+}
+
+function Accordian() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  return (
+    <>
+      <Panel
+        title="Tab 1"
+        isActive={activeIndex === 0}
+        onShow={() => {
+          setActiveIndex(0);
+        }}
+      >
+        <p>Tab 1 content</p>
+      </Panel>
+      <Panel
+        title="Tab 2"
+        isActive={activeIndex === 1}
+        onShow={() => {
+          setActiveIndex(1);
+        }}
+      >
+        <p>Tab 2 content</p>
+      </Panel>
+    </>
+  );
+}
+
+function Panel({ title, children, isActive, onShow }) {
+  return (
+    <div className="panel">
+      <h3>{title}</h3>
+      {isActive ? (
+        <p>{children}</p>
+      ) : (
+        <button onClick={onShow}>Show the tab</button>
+      )}
+    </div>
   );
 }
 
@@ -1231,6 +1274,7 @@ const App = () => {
       <TravelPlan />
       <TravelPlanItemList />
       <MailClient />
+      <Accordian />
     </div>
   );
 };
