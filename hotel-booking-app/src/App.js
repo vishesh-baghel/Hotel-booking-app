@@ -1302,6 +1302,53 @@ function FilterableList() {
   );
 }
 
+function CounterBox() {
+  const [countA, setCountA] = useState(0);
+  const [countB, setCountB] = useState(0);
+  const [showB, setShowB] = useState(true);
+
+  return (
+    <div style={{ border: "1px solid grey", margin: "2px" }}>
+      <p style={{ border: "1px solid grey", margin: "20px 20px" }}>
+        Counter: {countA}{" "}
+        <button
+          style={{ margin: "10px 10px" }}
+          onClick={() => {
+            setCountA(countA + 1);
+          }}
+        >
+          Add one
+        </button>
+        <hr />
+        {showB && (
+          <p style={{ border: "1px solid grey", margin: "20px 20px" }}>
+            {" "}
+            Counter: {countB}
+            <button
+              style={{ margin: "10px 10px" }}
+              onClick={() => {
+                setCountB(countB + 2);
+              }}
+            >
+              Add two
+            </button>
+          </p>
+        )}
+      </p>
+      <label>
+        <input
+          type="checkbox"
+          checked={showB}
+          onChange={(e) => {
+            setShowB(e.target.checked);
+          }}
+        />{" "}
+        Show second box
+      </label>
+    </div>
+  );
+}
+
 const App = () => {
   const status = "Loading...";
   return (
@@ -1354,6 +1401,7 @@ const App = () => {
       <MailClient />
       <Accordian />
       <FilterableList />
+      <CounterBox />
     </div>
   );
 };
