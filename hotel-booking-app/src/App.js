@@ -1306,9 +1306,23 @@ function CounterBox() {
   const [countA, setCountA] = useState(0);
   const [countB, setCountB] = useState(0);
   const [showB, setShowB] = useState(true);
+  const [isFancy, setIsFancy] = useState(false);
+
+  let className = "counter";
+
+  function handleFancyStyle(e) {
+    setIsFancy(e.target.checked);
+
+    if (isFancy) {
+      className += " fancy";
+    }
+  }
 
   return (
-    <div style={{ border: "1px solid grey", margin: "2px" }}>
+    <div
+      className={className}
+      style={{ border: "1px solid grey", margin: "2px" }}
+    >
       <p style={{ border: "1px solid grey", margin: "20px 20px" }}>
         Counter: {countA}{" "}
         <button
@@ -1344,6 +1358,11 @@ function CounterBox() {
           }}
         />{" "}
         Show second box
+      </label>
+      <br />
+      <label>
+        <input type="checkbox" checked={isFancy} onChange={handleFancyStyle} />{" "}
+        use Fancy style: {isFancy ? "Yes" : "No"}
       </label>
     </div>
   );
@@ -1401,6 +1420,7 @@ const App = () => {
       <MailClient />
       <Accordian />
       <FilterableList />
+
       <CounterBox />
     </div>
   );

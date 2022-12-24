@@ -31,6 +31,15 @@
   border: 5px solid #a6b5ff;
 }
 
+.counter {
+  border-radius: 10px;
+}
+
+.fancy {
+  border: 5px solid gold;
+  color: #ff6767;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
