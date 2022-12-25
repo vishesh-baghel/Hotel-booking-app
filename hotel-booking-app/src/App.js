@@ -1302,7 +1302,7 @@ function FilterableList() {
   );
 }
 
-function CounterBox() {
+function CounterBox({ player }) {
   const [countA, setCountA] = useState(0);
   const [countB, setCountB] = useState(0);
   const [showB, setShowB] = useState(true);
@@ -1331,7 +1331,7 @@ function CounterBox() {
             setCountA(countA + 1);
           }}
         >
-          Add one
+          Add one for {player}
         </button>
         <hr />
         {showB && (
@@ -1344,7 +1344,7 @@ function CounterBox() {
                 setCountB(countB + 2);
               }}
             >
-              Add two
+              Add two for {player}
             </button>
           </p>
         )}
@@ -1363,6 +1363,31 @@ function CounterBox() {
       <label>
         <input type="checkbox" checked={isFancy} onChange={handleFancyStyle} />{" "}
         use Fancy style: {isFancy ? "Yes" : "No"}
+      </label>
+    </div>
+  );
+}
+
+function ScoreCard() {
+  const [isPlayerOne, setIsPlayerOne] = useState(false);
+
+  return (
+    <div>
+      <h3>Score Card</h3>
+      {isPlayerOne ? (
+        <CounterBox player="Player One" />
+      ) : (
+        <CounterBox player="Player Two" />
+      )}
+      <label>
+        <button
+          value={isPlayerOne}
+          onClick={() => {
+            setIsPlayerOne(!isPlayerOne);
+          }}
+        >
+          Next Player
+        </button>
       </label>
     </div>
   );
@@ -1420,8 +1445,8 @@ const App = () => {
       <MailClient />
       <Accordian />
       <FilterableList />
-
       <CounterBox />
+      <ScoreCard />
     </div>
   );
 };
