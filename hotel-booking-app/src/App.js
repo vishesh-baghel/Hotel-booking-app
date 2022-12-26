@@ -1393,6 +1393,45 @@ function ScoreCard() {
   );
 }
 
+function Form() {
+  return (
+    <form>
+      <input type="text" placeholder="Enter something" />
+    </form>
+  );
+}
+
+function SampleForm() {
+  const [showHint, setShowHint] = useState(false);
+
+  return (
+    <div style={{ border: "1px solid grey", margin: "2px" }}>
+      {showHint && <p>Hint: This is a simple form</p>}
+      <Form />
+
+      {showHint ? (
+        <button
+          value={showHint}
+          onClick={() => {
+            setShowHint(false);
+          }}
+        >
+          Show hint
+        </button>
+      ) : (
+        <button
+          value={showHint}
+          onClick={() => {
+            setShowHint(true);
+          }}
+        >
+          Hide hint
+        </button>
+      )}
+    </div>
+  );
+}
+
 const App = () => {
   const status = "Loading...";
   return (
@@ -1447,6 +1486,7 @@ const App = () => {
       <FilterableList />
       <CounterBox />
       <ScoreCard />
+      <SampleForm />
     </div>
   );
 };
