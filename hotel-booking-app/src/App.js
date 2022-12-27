@@ -1432,6 +1432,54 @@ function SampleForm() {
   );
 }
 
+const contacts = [
+  { id: 0, name: "Taylor", email: "taylor@mail.com" },
+  { id: 1, name: "Alice", email: "alice@mail.com" },
+  { id: 2, name: "Bob", email: "bob@mail.com" },
+];
+
+function ContactList({ contacts, selectedContacts, onSelect }) {
+  return (
+    <ul className="contact-list">
+      {contacts.map((contact) => (
+        <li key={contact.id}>
+          <button
+            onClick={() => {
+              onSelect(contact);
+            }}
+          >
+            {contact.name} - {contact.email}
+          </button>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function Chat({ key, contact }) {
+  return (
+    <div>
+      <h2>Chat with {contact.name}</h2>
+      <p>Chat content goes here</p>
+      <textarea input="text" placeholder={"Message to " + contact.name} />
+    </div>
+  );
+}
+
+function Messenger() {
+  const [to, setTo] = useState(contacts[0]);
+  return (
+    <div className="simple-box">
+      <ContactList
+        contacts={contacts}
+        selectedContacts={to}
+        onSelect={(contact) => setTo(contact)}
+      />
+      <Chat key={to.id} contact={to} />
+    </div>
+  );
+}
+
 const App = () => {
   const status = "Loading...";
   return (
@@ -1487,6 +1535,7 @@ const App = () => {
       <CounterBox />
       <ScoreCard />
       <SampleForm />
+      <Messenger />
     </div>
   );
 };
