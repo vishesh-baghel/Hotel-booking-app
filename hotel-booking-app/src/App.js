@@ -1480,6 +1480,70 @@ function Messenger() {
   );
 }
 
+function ReverseInput() {
+  const [reverse, setReverse] = useState(false);
+
+  let checkBox = (
+    <label>
+      <input
+        type="checkbox"
+        value={reverse}
+        onChange={(e) => {
+          setReverse(e.target.checked);
+        }}
+      />{" "}
+      Reverse
+    </label>
+  );
+
+  return <div className="simple-box"></div>;
+}
+
+const initialTasks = [
+  { id: 0, text: "Visit Kafka Museum", done: true },
+  { id: 1, text: "Watch a puppet show", done: false },
+  { id: 2, text: "Lennon Wall pic", done: false },
+];
+
+function TaskApp() {
+  const [tasks, setTasks] = useState(initialTasks);
+
+  function handleAddTask() {}
+
+  function handleChangeTask() {}
+
+  function handleDeleteTask() {}
+
+  return (
+    <div className="simple-box">
+      <h3>Task App</h3>
+      <br />
+      <AddTask onAddTask={handleAddTask} />
+      <TaskList
+        tasks={tasks}
+        onChangeTask={handleChangeTask}
+        onDeleteTask={handleDeleteTask}
+      />
+    </div>
+  );
+}
+
+function AddTask({ onAddTask }) {
+  const [text, setText] = useState("");
+  return (
+    <div>
+      <input
+        type="text"
+        placeholder="Enter new task"
+        value={text}
+        onChange={onAddTask(text)}
+      />
+    </div>
+  );
+}
+
+function TaskList({ tasks, onChangeTask, onDeleteTask }) {}
+
 const App = () => {
   const status = "Loading...";
   return (
@@ -1536,6 +1600,7 @@ const App = () => {
       <ScoreCard />
       <SampleForm />
       <Messenger />
+      <TaskApp />
     </div>
   );
 };
