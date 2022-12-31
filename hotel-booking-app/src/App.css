@@ -45,11 +45,21 @@
   height: 200px;
   border: 5px solid #a6b5ff;
   border-radius: 10px;
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+  margin-bottom: 40px;
+  font-size: 1rem;
+  color: grey;
+}
+
+.page {
+  width: 100vw;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1rem;
-  color: #a6b5ff;
+  background: #eee;
 }
 
 @media (prefers-reduced-motion: no-preference) {

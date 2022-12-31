@@ -1,6 +1,7 @@
 import "./App.css";
 import { initialTravelPlan } from "./places";
-import { useState } from "react";
+import { useState, useReducer, useContext } from "react";
+import { createContext } from "react";
 
 // const API_KEY = "www.omdbapi.com/?apikey=c4b00c87";
 
@@ -1498,7 +1499,7 @@ function ReverseInput() {
 
   return <div className="simple-box"></div>;
 }
-
+let nextIdA = 3;
 const initialTasks = [
   { id: 0, text: "Visit Kafka Museum", done: true },
   { id: 1, text: "Watch a puppet show", done: false },
@@ -1506,18 +1507,32 @@ const initialTasks = [
 ];
 
 function TaskApp() {
-  const [tasks, setTasks] = useState(initialTasks);
+  const [tasks, dispatch] = useReducer(taskReducer, initialTasks);
 
-  function handleAddTask() {}
+  function handleAddTask(text) {
+    dispatch({
+      type: "add",
+      id: nextIdA++,
+      text: text,
+    });
+  }
 
-  function handleChangeTask() {}
+  function handleChangeTask(task) {
+    dispatch({
+      type: "change",
+      id: task.id,
+    });
+  }
 
-  function handleDeleteTask() {}
+  function handleDeleteTask(taskId) {
+    dispatch({
+      type: "delete",
+      id: taskId,
+    });
+  }
 
   return (
     <div className="simple-box">
-      <h3>Task App</h3>
-      <br />
       <AddTask onAddTask={handleAddTask} />
       <TaskList
         tasks={tasks}
@@ -1528,6 +1543,39 @@ function TaskApp() {
   );
 }
 
+function taskReducer(tasks, action) {
+  switch (action.type) {
+    case "added": {
+      return [
+        ...tasks,
+        {
+          id: action.id,
+          text: action.text,
+          done: false,
+        },
+      ];
+    }
+
+    case "changed": {
+      return tasks.map((t) => {
+        if (t.id === action.task.id) {
+          return action.task;
+        } else {
+          return t;
+        }
+      });
+    }
+
+    case "deleted": {
+      return tasks.filter((t) => t.id !== action.id);
+    }
+
+    default: {
+      throw new Error("Unknown action type: " + action.type);
+    }
+  }
+}
+
 function AddTask({ onAddTask }) {
   const [text, setText] = useState("");
   return (
@@ -1536,13 +1584,153 @@ function AddTask({ onAddTask }) {
         type="text"
         placeholder="Enter new task"
         value={text}
-        onChange={onAddTask(text)}
-      />
+        onChange={(e) => {
+          setText(e.target.value);
+        }}
+      />{" "}
+      <button
+        onClick={() => {
+          setText("");
+          onAddTask(text);
+        }}
+      >
+        Add
+      </button>
     </div>
   );
 }
 
-function TaskList({ tasks, onChangeTask, onDeleteTask }) {}
+function Task({ task, onChange, onDelete }) {
+  const [isEditing, setIsEditing] = useState(false);
+  let taskContent;
+  if (isEditing) {
+    taskContent = (
+      <>
+        <input
+          type="text"
+          value={task.text}
+          onChange={(e) => {
+            onChange({
+              ...task,
+              text: e.target.value,
+            });
+          }}
+        />
+        <button
+          onClick={(e) => {
+            setIsEditing(false);
+          }}
+        >
+          Save
+        </button>
+      </>
+    );
+  } else {
+    taskContent = (
+      <>
+        {task.text}
+        <button
+          onClick={() => {
+            setIsEditing(true);
+          }}
+        >
+          Edit
+        </button>
+      </>
+    );
+  }
+
+  return (
+    <label>
+      <input
+        type="checkbox"
+        checked={task.done}
+        onChange={(e) => {
+          onChange({
+            ...task,
+            done: e.target.checked,
+          });
+        }}
+      />
+      {taskContent}
+      <button
+        onClick={() => {
+          onDelete(task.id);
+        }}
+      >
+        Delete
+      </button>
+    </label>
+  );
+}
+
+function TaskList({ tasks, onChangeTask, onDeleteTask }) {
+  return (
+    <ul>
+      {tasks.map((task) => (
+        <li key={task.id}>
+          <Task task={task} onChange={onChangeTask} onDelete={onDeleteTask} />
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+const levelContext = createContext(1);
+
+function Page() {
+  return (
+    <div className="simple-box page">
+      <Section level={1}>
+        <Heading>Title</Heading>
+        <Section level={2}>
+          <Heading>Sub Title</Heading>
+          <Section level={3}>
+            <Heading>Sub Sub Title</Heading>
+            <Section level={4}>
+              <Heading>Sub Sub Sub Title</Heading>
+            </Section>
+          </Section>
+        </Section>
+      </Section>
+    </div>
+  );
+}
+
+function Section({ level, children }) {
+  return (
+    <section className="section">
+      <levelContext.Provider value={level}>{children}</levelContext.Provider>
+    </section>
+  );
+}
+
+function Heading({ children }) {
+  let level = useContext(levelContext);
+  switch (level) {
+    case 1: {
+      return <h1>{children}</h1>;
+    }
+    case 2: {
+      return <h2>{children}</h2>;
+    }
+    case 3: {
+      return <h3>{children}</h3>;
+    }
+    case 4: {
+      return <h4>{children}</h4>;
+    }
+    case 5: {
+      return <h5>{children}</h5>;
+    }
+    case 6: {
+      return <h6>{children}</h6>;
+    }
+    default: {
+      throw new Error("Unknown level: " + level);
+    }
+  }
+}
 
 const App = () => {
   const status = "Loading...";
@@ -1573,7 +1761,7 @@ const App = () => {
         onPlayMovie={() => alert("Played movie")}
         onUploadImage={() => alert("Uploaded movie")}
       />
-      <Toolbar2 />
+      {/* <Toolbar2 />
       <EventPropogation />
       <Signup />
       <CheckLocalVariable />
@@ -1588,7 +1776,7 @@ const App = () => {
       <DeleteFromList />
       <ShapeEditor />
       <StatesOfForm />
-      <Picture />
+      <Picture /> */}
       {/* <EditProfile /> */}
       <Menu />
       <TravelPlan />
@@ -1601,6 +1789,7 @@ const App = () => {
       <SampleForm />
       <Messenger />
       <TaskApp />
+      <Page />
     </div>
   );
 };
