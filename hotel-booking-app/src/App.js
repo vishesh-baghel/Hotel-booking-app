@@ -1,6 +1,6 @@
 import "./App.css";
 import { initialTravelPlan } from "./places";
-import { useState, useReducer, useContext } from "react";
+import { useState, useReducer, useContext, useRef } from "react";
 import { createContext } from "react";
 
 // const API_KEY = "www.omdbapi.com/?apikey=c4b00c87";
@@ -1732,6 +1732,16 @@ function Heading({ children }) {
   }
 }
 
+function RefCounter() {
+  let ref = useRef(0);
+
+  function handleClick() {
+    ref.current = ref.current + 1;
+    alert("you clicked me " + ref.current + " times");
+  }
+  return <button onClick={handleClick}>Click me</button>;
+}
+
 const App = () => {
   const status = "Loading...";
   return (
@@ -1790,6 +1800,7 @@ const App = () => {
       <Messenger />
       <TaskApp />
       <Page />
+      <RefCounter />
     </div>
   );
 };
